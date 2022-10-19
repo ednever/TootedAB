@@ -29,8 +29,6 @@
         private void InitializeComponent()
         {
             this.Toode_txt = new System.Windows.Forms.TextBox();
-            this.Hind_txt = new System.Windows.Forms.TextBox();
-            this.Kogus_txt = new System.Windows.Forms.TextBox();
             this.Hind_lbl = new System.Windows.Forms.Label();
             this.Kogus_lbl = new System.Windows.Forms.Label();
             this.Toode_lbl = new System.Windows.Forms.Label();
@@ -43,8 +41,13 @@
             this.Kustuta_btn = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.lisa_kat = new System.Windows.Forms.Button();
+            this.Kogus_nud = new System.Windows.Forms.NumericUpDown();
+            this.Hind_nud = new System.Windows.Forms.NumericUpDown();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.Toode_pbox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Kogus_nud)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Hind_nud)).BeginInit();
             this.SuspendLayout();
             // 
             // Toode_txt
@@ -54,22 +57,6 @@
             this.Toode_txt.Name = "Toode_txt";
             this.Toode_txt.Size = new System.Drawing.Size(100, 23);
             this.Toode_txt.TabIndex = 0;
-            // 
-            // Hind_txt
-            // 
-            this.Hind_txt.Font = new System.Drawing.Font("Miriam Mono CLM", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.Hind_txt.Location = new System.Drawing.Point(171, 46);
-            this.Hind_txt.Name = "Hind_txt";
-            this.Hind_txt.Size = new System.Drawing.Size(100, 23);
-            this.Hind_txt.TabIndex = 3;
-            // 
-            // Kogus_txt
-            // 
-            this.Kogus_txt.Font = new System.Drawing.Font("Miriam Mono CLM", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.Kogus_txt.Location = new System.Drawing.Point(171, 83);
-            this.Kogus_txt.Name = "Kogus_txt";
-            this.Kogus_txt.Size = new System.Drawing.Size(100, 23);
-            this.Kogus_txt.TabIndex = 4;
             // 
             // Hind_lbl
             // 
@@ -124,6 +111,7 @@
             this.Toode_pbox.Location = new System.Drawing.Point(286, 9);
             this.Toode_pbox.Name = "Toode_pbox";
             this.Toode_pbox.Size = new System.Drawing.Size(224, 136);
+            this.Toode_pbox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.Toode_pbox.TabIndex = 10;
             this.Toode_pbox.TabStop = false;
             // 
@@ -136,6 +124,7 @@
             this.Vali_btn.TabIndex = 11;
             this.Vali_btn.Text = "Vali fail";
             this.Vali_btn.UseVisualStyleBackColor = true;
+            this.Vali_btn.Click += new System.EventHandler(this.Vali_btn_Click);
             // 
             // Lisa_btn
             // 
@@ -146,6 +135,7 @@
             this.Lisa_btn.TabIndex = 12;
             this.Lisa_btn.Text = "Lisa";
             this.Lisa_btn.UseVisualStyleBackColor = true;
+            this.Lisa_btn.Click += new System.EventHandler(this.Lisa_btn_Click);
             // 
             // Uuenda_btn
             // 
@@ -156,6 +146,7 @@
             this.Uuenda_btn.TabIndex = 13;
             this.Uuenda_btn.Text = "Uuenda";
             this.Uuenda_btn.UseVisualStyleBackColor = true;
+            this.Uuenda_btn.Click += new System.EventHandler(this.Uuenda_btn_Click);
             // 
             // Kustuta_btn
             // 
@@ -187,11 +178,30 @@
             this.lisa_kat.UseVisualStyleBackColor = true;
             this.lisa_kat.Click += new System.EventHandler(this.lisa_kat_Click);
             // 
+            // Kogus_nud
+            // 
+            this.Kogus_nud.Font = new System.Drawing.Font("Miriam Mono CLM", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.Kogus_nud.Location = new System.Drawing.Point(171, 42);
+            this.Kogus_nud.Name = "Kogus_nud";
+            this.Kogus_nud.Size = new System.Drawing.Size(100, 30);
+            this.Kogus_nud.TabIndex = 17;
+            // 
+            // Hind_nud
+            // 
+            this.Hind_nud.DecimalPlaces = 2;
+            this.Hind_nud.Font = new System.Drawing.Font("Miriam Mono CLM", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.Hind_nud.Location = new System.Drawing.Point(171, 81);
+            this.Hind_nud.Name = "Hind_nud";
+            this.Hind_nud.Size = new System.Drawing.Size(100, 30);
+            this.Hind_nud.TabIndex = 18;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(639, 415);
+            this.Controls.Add(this.Hind_nud);
+            this.Controls.Add(this.Kogus_nud);
             this.Controls.Add(this.lisa_kat);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.Kustuta_btn);
@@ -204,13 +214,13 @@
             this.Controls.Add(this.Toode_lbl);
             this.Controls.Add(this.Kogus_lbl);
             this.Controls.Add(this.Hind_lbl);
-            this.Controls.Add(this.Kogus_txt);
-            this.Controls.Add(this.Hind_txt);
             this.Controls.Add(this.Toode_txt);
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.Toode_pbox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Kogus_nud)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Hind_nud)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -219,8 +229,6 @@
         #endregion
 
         private System.Windows.Forms.TextBox Toode_txt;
-        private System.Windows.Forms.TextBox Hind_txt;
-        private System.Windows.Forms.TextBox Kogus_txt;
         private System.Windows.Forms.Label Hind_lbl;
         private System.Windows.Forms.Label Kogus_lbl;
         private System.Windows.Forms.Label Toode_lbl;
@@ -233,6 +241,9 @@
         private System.Windows.Forms.Button Kustuta_btn;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button lisa_kat;
+        private System.Windows.Forms.NumericUpDown Kogus_nud;
+        private System.Windows.Forms.NumericUpDown Hind_nud;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
 
