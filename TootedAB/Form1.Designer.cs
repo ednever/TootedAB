@@ -34,7 +34,7 @@
             this.Hind_lbl = new System.Windows.Forms.Label();
             this.Kogus_lbl = new System.Windows.Forms.Label();
             this.Toode_lbl = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.Kat_cbox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.Toode_pbox = new System.Windows.Forms.PictureBox();
             this.Vali_btn = new System.Windows.Forms.Button();
@@ -42,6 +42,7 @@
             this.Uuenda_btn = new System.Windows.Forms.Button();
             this.Kustuta_btn = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.lisa_kat = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Toode_pbox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
@@ -100,13 +101,13 @@
             this.Toode_lbl.TabIndex = 7;
             this.Toode_lbl.Text = "Toode nimetus";
             // 
-            // comboBox1
+            // Kat_cbox
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(171, 124);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(100, 21);
-            this.comboBox1.TabIndex = 8;
+            this.Kat_cbox.FormattingEnabled = true;
+            this.Kat_cbox.Location = new System.Drawing.Point(171, 124);
+            this.Kat_cbox.Name = "Kat_cbox";
+            this.Kat_cbox.Size = new System.Drawing.Size(100, 21);
+            this.Kat_cbox.TabIndex = 8;
             // 
             // label1
             // 
@@ -165,6 +166,7 @@
             this.Kustuta_btn.TabIndex = 14;
             this.Kustuta_btn.Text = "Kustuta";
             this.Kustuta_btn.UseVisualStyleBackColor = true;
+            this.Kustuta_btn.Click += new System.EventHandler(this.Kustuta_btn_Click);
             // 
             // dataGridView1
             // 
@@ -174,11 +176,23 @@
             this.dataGridView1.Size = new System.Drawing.Size(608, 211);
             this.dataGridView1.TabIndex = 15;
             // 
+            // lisa_kat
+            // 
+            this.lisa_kat.Font = new System.Drawing.Font("Miriam Mono CLM", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.lisa_kat.Location = new System.Drawing.Point(104, 151);
+            this.lisa_kat.Name = "lisa_kat";
+            this.lisa_kat.Size = new System.Drawing.Size(176, 31);
+            this.lisa_kat.TabIndex = 16;
+            this.lisa_kat.Text = "Lisa kategooria";
+            this.lisa_kat.UseVisualStyleBackColor = true;
+            this.lisa_kat.Click += new System.EventHandler(this.lisa_kat_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(639, 415);
+            this.Controls.Add(this.lisa_kat);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.Kustuta_btn);
             this.Controls.Add(this.Uuenda_btn);
@@ -186,7 +200,7 @@
             this.Controls.Add(this.Vali_btn);
             this.Controls.Add(this.Toode_pbox);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.Kat_cbox);
             this.Controls.Add(this.Toode_lbl);
             this.Controls.Add(this.Kogus_lbl);
             this.Controls.Add(this.Hind_lbl);
@@ -210,7 +224,7 @@
         private System.Windows.Forms.Label Hind_lbl;
         private System.Windows.Forms.Label Kogus_lbl;
         private System.Windows.Forms.Label Toode_lbl;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox Kat_cbox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.PictureBox Toode_pbox;
         private System.Windows.Forms.Button Vali_btn;
@@ -218,6 +232,7 @@
         private System.Windows.Forms.Button Uuenda_btn;
         private System.Windows.Forms.Button Kustuta_btn;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Button lisa_kat;
     }
 }
 
