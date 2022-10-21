@@ -15,7 +15,8 @@ namespace TootedAB
     {
         SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\AppData\Tooted_AB.mdf;Integrated Security=True");
         SqlCommand cmd;
-        SqlDataAdapter adapter_toode, adapter_kat;        
+        SqlDataAdapter adapter_toode, adapter_kat;  
+        OpenFileDialog openFileDialog1 = new OpenFileDialog();
         public Form1()
         {
             InitializeComponent();
@@ -50,18 +51,54 @@ namespace TootedAB
         }
         void lisa_kat_Click(object sender, EventArgs e)
         {
-            connect.Open();
-            cmd = new SqlCommand("INSERT INTO Kategooriatable (Kategooria_nimetus) VALUES (@kat)",connect);
-            cmd.Parameters.AddWithValue("@kat", Kat_cbox.Text);
-            cmd.ExecuteNonQuery();
-            
+            if (Kat_cbox.SelectedItem != null)
+            {
+                connect.Open();
+                cmd = new SqlCommand("INSERT INTO Kategooriatable (Kategooria_nimetus) VALUES (@kat)", connect);
+                cmd.Parameters.AddWithValue("@kat", Kat_cbox.Text);
+                cmd.ExecuteNonQuery();
 
-            Kat_cbox.Items.Add(Kat_cbox.Text);
-            connect.Close();
+                Kat_cbox.Items.Add(Kat_cbox.Text);
+                connect.Close();
+                Kat_cbox.SelectedItem = null;
+            }
+            else
+            {
+                MessageBox.Show("Sisesta andmed!");
+            }
         }
         void Kustuta_btn_Click(object sender, EventArgs e)
         {
-            Kustuta_Andmed();
+            //if (Kat_cbox.Text != null)
+            //{
+            //    using (SqlCommand deleteRecord = new SqlCommand($"DELETE FROM Kategooriatable WHERE Kategooria_nimetus = @kat", connect))
+            //    {
+            //        connect.Open();
+            //        deleteRecord.Parameters.AddWithValue("@kat", Kat_cbox.Text);
+            //        deleteRecord.ExecuteNonQuery();
+            //        connect.Close();                    
+            //    }
+            //    Kat_cbox.SelectedItem = null;
+            //}
+
+            if (dataGridView1.SelectedRows.Count == 0)
+            {
+                string sql = "DELETE FROM Toodetable WHERE Id = @rowID";
+
+                using (SqlCommand deleteRecord = new SqlCommand(sql, connect))
+                {
+                    connect.Open();
+
+                    int selectedIndex = dataGridView1.SelectedRows[0].Index;
+                    int rowID = Convert.ToInt32(dataGridView1[0, selectedIndex].Value);
+
+                    deleteRecord.Parameters.Add("@rowID", SqlDbType.Int).Value = rowID;
+                    deleteRecord.ExecuteNonQuery();
+
+                    dataGridView1.Rows.RemoveAt(selectedIndex);
+                    connect.Close();
+                }
+            }                        
         }
         void Lisa_btn_Click(object sender, EventArgs e)
         {
@@ -94,11 +131,23 @@ namespace TootedAB
         }
         void Uuenda_btn_Click(object sender, EventArgs e)
         {
-            cmd = new SqlCommand("UPDATE * FROM ToodeTable", connect);
+            cmd = new SqlCommand("UPDATE * FROM ToodeTable SET (Toodenimetus, Kogus, Hind, Pilt, Kategooria_id)", connect);
+            cmd.ExecuteNonQuery();
+            connect.Close();
         }
         void Vali_btn_Click(object sender, EventArgs e)
         {
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                Toode_pbox.Load(openFileDialog1.FileName);
+            }            
+        }
+        void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dataGridView1.SelectedRows.Count == 0)
+            {
 
+            }
         }
     }
 }
