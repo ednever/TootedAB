@@ -165,8 +165,8 @@
             this.dataGridView1.Location = new System.Drawing.Point(16, 188);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(608, 211);
-            this.dataGridView1.TabIndex = 15;
-            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            this.dataGridView1.TabIndex = 15;            
+            this.dataGridView1.RowHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_RowHeaderMouseClick);
             // 
             // lisa_kat
             // 
