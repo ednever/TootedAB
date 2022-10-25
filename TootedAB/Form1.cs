@@ -18,6 +18,7 @@ namespace TootedAB
         SqlCommand cmd;
         SqlDataAdapter adapter_toode, adapter_kat;  
         Random random = new Random();
+        int Id;
         public Form1()
         {
             InitializeComponent();
@@ -68,57 +69,31 @@ namespace TootedAB
                 MessageBox.Show("Sisesta andmed!");
             }
         }
-        void Kustuta_btn_Click(object sender, EventArgs e)
-        {
-            //if (Kat_cbox.Text != null)
-            //{
-            //    using (SqlCommand deleteRecord = new SqlCommand($"DELETE FROM Kategooriatable WHERE Kategooria_nimetus = @kat", connect))
-            //    {
-            //        connect.Open();
-            //        deleteRecord.Parameters.AddWithValue("@kat", Kat_cbox.Text);
-            //        deleteRecord.ExecuteNonQuery();
-            //        connect.Close();                    
-            //    }
-            //    Kat_cbox.SelectedItem = null;
-            //}
-
-            if (dataGridView1.SelectedRows.Count == 0)
-            {
-                string sql = "DELETE FROM Toodetable WHERE Id = @rowID";
-
-                using (SqlCommand deleteRecord = new SqlCommand(sql, connect))
-                {
-                    connect.Open();
-
-                    int selectedIndex = dataGridView1.SelectedRows[0].Index;
-                    int rowID = Convert.ToInt32(dataGridView1[0, selectedIndex].Value);
-
-                    deleteRecord.Parameters.Add("@rowID", SqlDbType.Int).Value = rowID;
-                    deleteRecord.ExecuteNonQuery();
-
-                    dataGridView1.Rows.RemoveAt(selectedIndex);
-                    connect.Close();
-                }
-            }                        
-        }
         void Lisa_btn_Click(object sender, EventArgs e)
         {
             if (Toode_txt.Text != null && Kogus_nud != null && Hind_nud != null && Kat_cbox.SelectedItem != null)
             {
                 try
                 {
+
+                    //OpenFileDialog open = new OpenFileDialog();
+                    //open.InitialDirectory = Path.GetFullPath(@"..\..\Images");
+
+                    FileInfo open_info = new FileInfo(@"C:\Users\opilane.TTHK\Pictures" + Toode_txt.Text);
+                    string ext = Path.GetExtension(Toode_txt.Text);
+
                     connect.Open();
                     cmd = new SqlCommand("INSERT INTO Toodetable (Toodenimetus, Kogus, Hind, Pilt, Kategooria_id) VALUES (@toode,@kogus,@hind,@pilt,@kat)", connect);
                     cmd.Parameters.AddWithValue("@toode", Toode_txt.Text);
                     cmd.Parameters.AddWithValue("@kogus", Kogus_nud.Value);
                     cmd.Parameters.AddWithValue("@hind", Hind_nud.Value);
-                    cmd.Parameters.AddWithValue("@pilt", Toode_txt.Text + ".jpg"); // + format
-                    cmd.Parameters.AddWithValue("@kat", Kat_cbox.SelectedIndex + 1); // + ID andmebaasist võtta
+                    cmd.Parameters.AddWithValue("@pilt", Toode_txt.Text + ext); // + format -- Toode_txt.Text + ".jpg"
+                    cmd.Parameters.AddWithValue("@kat", Kat_cbox.SelectedIndex + 1); // + ID andmebaasist võtta -- Kat_cbox.SelectedIndex + 1
                     cmd.ExecuteNonQuery();
                     connect.Close();
                     Kustuta_Andmed();
                     Naita_Andmed();
-                    
+
                 }
                 catch (Exception)
                 {
@@ -129,24 +104,6 @@ namespace TootedAB
             {
                 MessageBox.Show("Sisesta andmed!");
             }
-        }
-        void Uuenda_btn_Click(object sender, EventArgs e)
-        {
-            if (Toode_txt.Text != null && Kogus_nud != null && Hind_nud != null && Kat_cbox.SelectedItem != null)
-            {
-                connect.Open();
-                cmd = new SqlCommand("UPDATE * FROM ToodeTable SET (Toodenimetus = @toode, Kogus = @kogus, Hind = @hind, Pilt = @pilt, Kategooria_id WHERE Id = @Id)", connect);
-                cmd.Parameters.AddWithValue("@toode", Toode_txt.Text);
-                cmd.Parameters.AddWithValue("@kogus", Kogus_nud.Value);
-                cmd.Parameters.AddWithValue("@hind", Hind_nud.Value);
-                cmd.Parameters.AddWithValue("@pilt", Toode_txt.Text + ".jpg"); // + format
-                cmd.Parameters.AddWithValue("@kat", Kat_cbox.SelectedIndex + 1); // + ID andmebaasist võtta
-                cmd.ExecuteNonQuery();
-                connect.Close();
-                Kustuta_Andmed();
-                Naita_Andmed();
-                connect.Close();
-            }            
         }
         void Vali_btn_Click(object sender, EventArgs e)
         {
@@ -172,12 +129,46 @@ namespace TootedAB
                     destinationFile = @"..\..\Images\" + Toode_txt.Text + random.Next(1, 99999).ToString() + ext;
                     File.Copy(open.FileName, destinationFile);
                 }
-            }            
+            }
+        }
+        void Kustuta_btn_Click(object sender, EventArgs e)
+        {
+
+            if (dataGridView1.SelectedRows.Count == 0)
+            {
+                string sql = "DELETE FROM Toodetable WHERE Id = @rowID";
+
+                using (SqlCommand deleteRecord = new SqlCommand(sql, connect))
+                {
+                    connect.Open();
+
+                    int selectedIndex = dataGridView1.SelectedRows[0].Index;
+                    int rowID = Convert.ToInt32(dataGridView1[0, selectedIndex].Value);
+
+                    deleteRecord.Parameters.Add("@rowID", SqlDbType.Int).Value = rowID;
+                    deleteRecord.ExecuteNonQuery();
+
+                    dataGridView1.Rows.RemoveAt(selectedIndex);
+                    connect.Close();
+                }
+            }                        
+        }
+        void Kustuta_kat_btn_Click(object sender, EventArgs e)
+        {
+            cmd = new SqlCommand("SELECT Id FROM Kategooriatable WHERE Kategooria_nimetus = @kat",connect);
+            connect.Open();
+            cmd.Parameters.AddWithValue("@kat", Kat_cbox.Text);
+            cmd.ExecuteNonQuery();
+            Id = Convert.ToInt32(cmd.ExecuteScalar());
+            if (Id != 0)
+            {
+
+            }
         }
 
         void dataGridView1_RowHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            int Id = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString()); //kui andmed puuduvad reas siis on viga
+            Id = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString()); //kui andmed puuduvad reas siis on viga
             Toode_txt.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
             Kogus_nud.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
             Hind_nud.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
@@ -192,5 +183,52 @@ namespace TootedAB
             }            
             Kat_cbox.SelectedIndex = Int32.Parse(dataGridView1.Rows[e.RowIndex].Cells[5].Value.ToString()) - 1;
         }
+        void Uuenda_btn_Click(object sender, EventArgs e)
+        {
+            if (Toode_txt.Text != null && Kogus_nud != null && Hind_nud != null && Kat_cbox.SelectedItem != null)
+            {
+                connect.Open();
+                cmd = new SqlCommand("UPDATE * FROM ToodeTable SET (Toodenimetus = @toode, Kogus = @kogus, Hind = @hind, Pilt = @pilt, Kategooria_id = @kat) WHERE Id = @ID", connect);
+                cmd.Parameters.AddWithValue("@toode", Toode_txt.Text);
+                cmd.Parameters.AddWithValue("@kogus", Kogus_nud.Value);
+                cmd.Parameters.AddWithValue("@hind", Hind_nud.Value);
+                cmd.Parameters.AddWithValue("@pilt", Toode_txt.Text + ".jpg"); // + format
+                cmd.Parameters.AddWithValue("@kat", Kat_cbox.SelectedIndex + 1); // + ID andmebaasist võtta
+                cmd.Parameters.AddWithValue("@ID", Id);
+                cmd.ExecuteNonQuery();
+                connect.Close();
+                Kustuta_Andmed();
+                Naita_Andmed();
+            }
+        }
     }
 }
+
+//Основой проект
+// 1.
+//Доработать кнопку "Kustuta"
+
+// 2.
+//Доработать кнопку "Kustuta kategooria"
+
+//3.
+//В методах добавления и обновления данных сделать проверку на форматы
+
+
+//Дополнительное задание
+
+// 1. *** Сделано ***
+// Измени поля Kogus и Hind на числовые, добавь проверку на ввод(запрети вводит отрицательные значения).
+
+// 2.
+// Исправь проблемы с картинками при запуске запроса на обновление.
+
+// 3.
+// Создай форму Kassa, где обыгрывается продажа товара и создается чек.
+// (Файл в *.pdf формате сохраняется в папку Arved).
+
+// 4.
+// Создай регистрационную форму для ползователей.
+// При регистрации назначай роли Müüja и Omanik.
+// В роли omanik должны быть полностью доступны форма Tooded и форма Kassa.
+// Если пользователь в роли продавец, ему доступна только форма Kassa.
