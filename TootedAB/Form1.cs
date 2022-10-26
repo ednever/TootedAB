@@ -102,14 +102,14 @@ namespace TootedAB
             }
             else
             {
-                MessageBox.Show("Sisesta andmed!");
+                MessageBox.Show("Sisestage andmed!");
             }
         }
         void Vali_btn_Click(object sender, EventArgs e)
         {
             OpenFileDialog open = new OpenFileDialog();
             open.InitialDirectory = Path.GetFullPath(@"..\..\Images");
-            FileInfo open_info = new FileInfo(@"C:\Users\opilane.TTHK\Pictures" + open.FileName);
+            FileInfo open_info = new FileInfo(@"C:\Users\opilane.TTHK\Pictures\" + open.FileName);
 
             if (open.ShowDialog() == DialogResult.OK)
             {
@@ -177,22 +177,28 @@ namespace TootedAB
         }
         void dataGridView1_RowHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            Id = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString()); //kui andmed puuduvad reas siis on viga
-            Toode_txt.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
-            Kogus_nud.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
-            Hind_nud.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
             try
             {
-                Toode_pbox.Image = Image.FromFile(@"..\..\Images\" + dataGridView1.Rows[e.RowIndex].Cells[4].Value.ToString());
+                Id = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString()); //kui andmed puuduvad reas siis on viga
+                Toode_txt.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
+                Kogus_nud.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
+                Hind_nud.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
+                try
+                {
+                    Toode_pbox.Image = Image.FromFile(@"..\..\Images\" + dataGridView1.Rows[e.RowIndex].Cells[4].Value.ToString());
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Sellist faili pole kaustis","Error");
+                    Toode_pbox.Image = Image.FromFile(@"..\..\Images\nothing.png");
+                }            
+                Kat_cbox.SelectedIndex = Int32.Parse(dataGridView1.Rows[e.RowIndex].Cells[5].Value.ToString()) - 1;
             }
             catch (Exception)
             {
-                MessageBox.Show("Sellist faili pole kaustis","Error");
-                Toode_pbox.Image = Image.FromFile(@"..\..\Images\nothing.png");
-            }            
-            Kat_cbox.SelectedIndex = Int32.Parse(dataGridView1.Rows[e.RowIndex].Cells[5].Value.ToString()) - 1;
+                MessageBox.Show("Lisage andmed!");
+            }                    
         }
-
         void Uuenda_btn_Click(object sender, EventArgs e)
         {
             if (Toode_txt.Text != null && Kogus_nud != null && Hind_nud != null && Kat_cbox.SelectedItem != null)
@@ -223,16 +229,8 @@ namespace TootedAB
 //1.
 //В методах добавления и обновления данных сделать проверку на форматы
 
-//Дополнительное задание
 // 2.
-// Исправь проблемы с картинками при запуске запроса на обновление.
+// Исправить проблемы с картинками при запуске запроса на обновление
 
 // 3.
-// Создай форму Kassa, где обыгрывается продажа товара и создается чек.
-// (Файл в *.pdf формате сохраняется в папку Arved).
-
-// 4.
-// Создай регистрационную форму для ползователей.
-// При регистрации назначай роли Müüja и Omanik.
-// В роли omanik должны быть полностью доступны форма Tooded и форма Kassa.
-// Если пользователь в роли продавец, ему доступна только форма Kassa.
+// В форме Kassa (Form2) добавить информацию с базы данных
