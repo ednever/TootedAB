@@ -80,15 +80,15 @@ namespace TootedAB
                     //OpenFileDialog open = new OpenFileDialog();
                     //open.InitialDirectory = Path.GetFullPath(@"..\..\Images");
 
-                    //FileInfo open_info = new FileInfo(@"C:\Users\opilane.TTHK\Pictures" + Toode_txt.Text);
-                    //string ext = Path.GetExtension(Toode_txt.Text);
+                    FileInfo open_info = new FileInfo(@"C:\Users\opilane.TTHK\Pictures" + Toode_txt.Text);
+                    string ext = Path.GetExtension(@"..\..\Images\" + Toode_txt.Text);
 
                     connect.Open();
                     cmd = new SqlCommand("INSERT INTO Toodetable (Toodenimetus, Kogus, Hind, Pilt, Kategooria_id) VALUES (@toode,@kogus,@hind,@pilt,@kat)", connect);
                     cmd.Parameters.AddWithValue("@toode", Toode_txt.Text);
                     cmd.Parameters.AddWithValue("@kogus", Kogus_nud.Value);
                     cmd.Parameters.AddWithValue("@hind", Hind_nud.Value);
-                    cmd.Parameters.AddWithValue("@pilt", Toode_txt.Text + ".png"); // + format -- + ext);
+                    cmd.Parameters.AddWithValue("@pilt", Toode_txt.Text + ext);
                     cmd.Parameters.AddWithValue("@kat", Kat_cbox.SelectedIndex + 1); // + ID andmebaasist võtta 
                     cmd.ExecuteNonQuery();
                     connect.Close();
@@ -204,7 +204,7 @@ namespace TootedAB
             if (Toode_txt.Text != null && Kogus_nud != null && Hind_nud != null && Kat_cbox.SelectedItem != null)
             {
                 connect.Open();
-                cmd = new SqlCommand("UPDATE Toodetable SET (Toodenimetus = @toode, Kogus = @kogus, Hind = @hind, Pilt = @pilt, Kategooria_id = @kat) WHERE Id = @ID", connect);
+                cmd = new SqlCommand("UPDATE Toodetable SET Toodenimetus = @toode, Kogus = @kogus, Hind = @hind, Pilt = @pilt, Kategooria_id = @kat WHERE Id = @ID", connect);
                 cmd.Parameters.AddWithValue("@toode", Toode_txt.Text);
                 cmd.Parameters.AddWithValue("@kogus", Kogus_nud.Value);
                 cmd.Parameters.AddWithValue("@hind", Hind_nud.Value);
@@ -231,6 +231,3 @@ namespace TootedAB
 
 // 2.
 // Исправить проблемы с картинками при запуске запроса на обновление
-
-// 3.
-// В форме Kassa (Form2) добавить информацию с базы данных

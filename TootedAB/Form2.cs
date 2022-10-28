@@ -19,15 +19,29 @@ namespace TootedAB
     {
         SqlConnection connect;
         //SqlCommand cmd;
-        SqlDataAdapter adapter_toode, adapter_hind;
-        DataTable dt_toode, dt_hind;
+        SqlDataAdapter adapter_toode, adapter_hind, adapter;
+        DataTable dt_toode, dt_hind, dt;
         string hind;
         List<string> text = new List<string>();
+        List<Object> hinned = new List<Object>();
+        string[] paring = new string[2] {"Toodenimetus","Hind"};
         public Form2()
         {
             InitializeComponent();
             connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\AppData\Tooted_AB.mdf;Integrated Security=True");
             connect.Open();
+
+            //for (int i = 0; i < paring.Length; i++)
+            //{
+            //    adapter = new SqlDataAdapter("SELECT " + paring[i] + " FROM Toodetable", connect);
+            //    dt = new DataTable();
+            //    adapter.Fill(dt);
+            //    if (true)
+            //    {
+
+            //    }
+            //}
+
             adapter_toode = new SqlDataAdapter("SELECT Toodenimetus FROM Toodetable", connect);
             dt_toode = new DataTable();
             adapter_toode.Fill(dt_toode);
@@ -41,15 +55,13 @@ namespace TootedAB
             adapter_hind.Fill(dt_hind);
             foreach (DataRow nimetus in dt_hind.Rows)
             {
-                hind = nimetus["Hind"].ToString();
+                hinned.Add(nimetus["Hind"]);
             }
-            //hind = dt_hind.Rows
             connect.Close();
         }
-        int i;
-        private void button1_Click(object sender, EventArgs e)
+        int i, k;
+        void button1_Click(object sender, EventArgs e)
         {
-            text.Add(label2.Text + "\n");
             i++;
             PdfDocument document = new PdfDocument();
             PdfPage page = document.AddPage();
@@ -61,39 +73,51 @@ namespace TootedAB
             XFont font = new XFont("Miriam Mono CLM", 14.25, XFontStyle.Bold);
 
             //Finally use XGraphics & font object to draw text in PDF Page
-            gfx.DrawString("Kviitung", font, XBrushes.Black, new XRect(0, 0, 200, 50), XStringFormats.Center);
-            foreach (string line in text)
+            gfx.DrawString("Kviitung", font, XBrushes.IndianRed, new XRect(0, 0, 200, 50), XStringFormats.Center);
+            for (int j = 25; j <= text.Count * 25; j += 25)
             {
-                gfx.DrawString(line, font, XBrushes.Black, new XRect(0, 50, 200, 50), XStringFormats.Center);
+                gfx.DrawString(text[k], font, XBrushes.Black, new XRect(0, j, 200, 50), XStringFormats.Center);
+                k++;
             }            
-
             string filename = @"..\..\Arved\tsekk" + i.ToString() + ".pdf";
             document.Save(filename);
-            Process.Start(filename);            
+            Process.Start(filename);         
         }
 
-        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        void button2_Click(object sender, EventArgs e)
+        {
+            if (comboBox1.SelectedItem != null)
+            {
+                try
+                {
+                    text.Add(label2.Text + " " + comboBox1.SelectedItem.ToString());
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Sisesta andmed!", "Error");
+                }
+            }                       
+        }
+
+        void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {            
             if (comboBox1.SelectedItem != null)
             {
                 label2.Text = "€ " + hind + " x " + numericUpDown1.Value.ToString() + " = " + Convert.ToDecimal(hind) * numericUpDown1.Value;
-            }
-            
+            }            
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             foreach (Object nimetus in comboBox1.Items)
             {
                 if (comboBox1.SelectedItem == nimetus)
                 {
-                    //foreach (Object nimetus2 in collection)
-                    //{
-
-                    //}
+                    hind = hinned[comboBox1.SelectedIndex].ToString();
                     numericUpDown1.Value = 1;
+                    label2.Text = "€ " + hind + " x " + numericUpDown1.Value.ToString() + " = " + Convert.ToDecimal(hind) * numericUpDown1.Value;                    
                 }
-            }            
+            }          
         }
     }
 }
