@@ -18,6 +18,7 @@ namespace TootedAB
         SqlCommand cmd;
         SqlDataAdapter adapter_toode, adapter_kat;  
         Random random = new Random();
+        OpenFileDialog open = new OpenFileDialog();
         int Id;
         public Form1()
         {
@@ -87,7 +88,7 @@ namespace TootedAB
                     cmd.Parameters.AddWithValue("@toode", Toode_txt.Text);
                     cmd.Parameters.AddWithValue("@kogus", Kogus_nud.Value);
                     cmd.Parameters.AddWithValue("@hind", Hind_nud.Value);
-                    cmd.Parameters.AddWithValue("@pilt", Toode_txt.Text + ".jpg"); // + format -- + ext);
+                    cmd.Parameters.AddWithValue("@pilt", Toode_txt.Text + ".png"); // + format -- + ext);
                     cmd.Parameters.AddWithValue("@kat", Kat_cbox.SelectedIndex + 1); // + ID andmebaasist võtta 
                     cmd.ExecuteNonQuery();
                     connect.Close();
@@ -107,7 +108,6 @@ namespace TootedAB
         }
         void Vali_btn_Click(object sender, EventArgs e)
         {
-            OpenFileDialog open = new OpenFileDialog();
             open.InitialDirectory = Path.GetFullPath(@"..\..\Images");
             FileInfo open_info = new FileInfo(@"C:\Users\opilane.TTHK\Pictures\" + open.FileName);
 

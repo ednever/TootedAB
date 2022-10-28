@@ -18,13 +18,16 @@ namespace TootedAB
     public partial class Form2 : Form
     {
         SqlConnection connect;
-        SqlCommand cmd;
+        //SqlCommand cmd;
         SqlDataAdapter adapter_toode, adapter_hind;
         DataTable dt_toode, dt_hind;
+        string hind;
+        List<string> text = new List<string>();
         public Form2()
         {
             InitializeComponent();
             connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\AppData\Tooted_AB.mdf;Integrated Security=True");
+            connect.Open();
             adapter_toode = new SqlDataAdapter("SELECT Toodenimetus FROM Toodetable", connect);
             dt_toode = new DataTable();
             adapter_toode.Fill(dt_toode);
@@ -32,10 +35,21 @@ namespace TootedAB
             {
                 comboBox1.Items.Add(nimetus["Toodenimetus"]);
             }
+
+            adapter_hind = new SqlDataAdapter("SELECT Hind FROM Toodetable", connect);
+            dt_hind = new DataTable();
+            adapter_hind.Fill(dt_hind);
+            foreach (DataRow nimetus in dt_hind.Rows)
+            {
+                hind = nimetus["Hind"].ToString();
+            }
+            //hind = dt_hind.Rows
+            connect.Close();
         }
         int i;
         private void button1_Click(object sender, EventArgs e)
         {
+            text.Add(label2.Text + "\n");
             i++;
             PdfDocument document = new PdfDocument();
             PdfPage page = document.AddPage();
@@ -48,7 +62,10 @@ namespace TootedAB
 
             //Finally use XGraphics & font object to draw text in PDF Page
             gfx.DrawString("Kviitung", font, XBrushes.Black, new XRect(0, 0, 200, 50), XStringFormats.Center);
-            gfx.DrawString(label2.Text, font, XBrushes.Black, new XRect(0, 50, 200, 50), XStringFormats.Center);
+            foreach (string line in text)
+            {
+                gfx.DrawString(line, font, XBrushes.Black, new XRect(0, 50, 200, 50), XStringFormats.Center);
+            }            
 
             string filename = @"..\..\Arved\tsekk" + i.ToString() + ".pdf";
             document.Save(filename);
@@ -57,24 +74,27 @@ namespace TootedAB
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {            
-            if (comboBox1.SelectedIndex == 0)
+            if (comboBox1.SelectedItem != null)
             {
-                label2.Text = "€ 1.5 x " + numericUpDown1.Value.ToString();
+                label2.Text = "€ " + hind + " x " + numericUpDown1.Value.ToString() + " = " + Convert.ToDecimal(hind) * numericUpDown1.Value;
             }
             
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            adapter_hind = new SqlDataAdapter("SELECT Hind FROM Toodetable", connect);
-            dt_hind = new DataTable();
-            adapter_hind.Fill(dt_hind);
-            
-            if (comboBox1.SelectedIndex == 0)
+            foreach (Object nimetus in comboBox1.Items)
             {
-                label2.Text += "1.5";
-            }
-            numericUpDown1.Value = 1;
+                if (comboBox1.SelectedItem == nimetus)
+                {
+                    foreach (Object nimetus2 in collection)
+                    {
+
+                    }
+                    numericUpDown1.Value = 1;
+                }
+            }            
         }
     }
 }
+//Добавить Kogus -- num max value
