@@ -87,10 +87,10 @@ namespace TootedAB
             {
                 if (comboBox1.SelectedItem == nimetus)
                 {
-                    foreach (Object nimetus2 in collection)
-                    {
+                    //foreach (Object nimetus2 in collection)
+                    //{
 
-                    }
+                    //}
                     numericUpDown1.Value = 1;
                 }
             }            
