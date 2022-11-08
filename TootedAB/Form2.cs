@@ -60,6 +60,7 @@ namespace TootedAB
             connect.Close();
         }
         int i, k;
+
         void button1_Click(object sender, EventArgs e)
         {
             i++;
@@ -98,6 +99,10 @@ namespace TootedAB
                 }
             }                       
         }
+        void button3_Click(object sender, EventArgs e)
+        {
+            new Form5().Show();
+        }
 
         void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {            
@@ -121,4 +126,11 @@ namespace TootedAB
         }
     }
 }
-//Добавить Kogus -- num max value
+// <<< Дополнительные задания для развития формы >>>
+// 1.
+// Купленные товары отнимаются от общего количество товаров -> Добавить Kogus -- num max value
+
+// 2.
+// Наглядный вариант кассы(сетка картинок) -> полностью переделать кассу -->
+//     1. TabControl - один из возможных вариантов для создания вкладок категорий с иконками и текстом
+//     2. Создание класса товар, который принимает за свойства значения с базы данных
