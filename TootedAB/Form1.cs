@@ -49,7 +49,7 @@ namespace TootedAB
             Toode_txt.Text = "";
             Hind_nud.Value = 0;
             Kogus_nud.Value = 0;
-            Kat_cbox.SelectedItem = null;
+            Kat_cbox.SelectedItem = null;            
         }
         void lisa_kat_Click(object sender, EventArgs e)
         {

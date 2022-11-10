@@ -10,24 +10,26 @@ using System.Windows.Forms;
 
 namespace TootedAB
 {
-    public partial class Form4 : Form
+    public partial class Form7 : Form
     {
-        public Form4()
+        public Form7()
         {
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        void button1_Click(object sender, EventArgs e)
         {
-            new Form2().Show();
+
         }
-        private void button2_Click(object sender, EventArgs e)
+
+        void button2_Click(object sender, EventArgs e)
         {
-            new Form1().Show();
+
         }
-        private void button3_Click(object sender, EventArgs e)
+
+        void button3_Click(object sender, EventArgs e)
         {
-            new Form7().Show();
+
         }
     }
 }

@@ -33,13 +33,13 @@ namespace TootedAB
                 }
                 else
                 {
-                    MessageBox.Show("Vale parool!");
+                    MessageBox.Show("Vale parool!","Error");
                     textBox1.Text = null;
                 }
             }
             else
             {
-                MessageBox.Show("Sisestage andmed!");
+                MessageBox.Show("Sisestage andmed!","Error");
             }
         }
     }

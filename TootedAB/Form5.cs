@@ -12,19 +12,32 @@ namespace TootedAB
 {
     public partial class Form5 : Form
     {
+        Klient klient = new Klient();
         public Form5()
         {
             InitializeComponent();
+            klient.input_Andmed();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        void button1_Click(object sender, EventArgs e)
         {
+            klient.Telefon = textBox1.Text;
+            klient.Parool = textBox2.Text;
 
+            //if (klient.kontrolli_vastust() == true)
+            //{
+            //    this.Close();
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Vigad andmed!", "Error");
+            //}
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        void button2_Click(object sender, EventArgs e)
         {
             new Form6().Show();
         }
+
     }
 }
