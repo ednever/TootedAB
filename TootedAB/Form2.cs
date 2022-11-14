@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.IO;
-using PdfSharp.Drawing;
-using PdfSharp.Pdf;
+//using PdfSharp.Drawing;
+//using PdfSharp.Pdf;
 using System.Diagnostics;
 
 namespace TootedAB
@@ -63,26 +63,26 @@ namespace TootedAB
 
         void button1_Click(object sender, EventArgs e)
         {
-            i++;
-            PdfDocument document = new PdfDocument();
-            PdfPage page = document.AddPage();
+            //i++;
+            //PdfDocument document = new PdfDocument();
+            //PdfPage page = document.AddPage();
 
-            //For drawing in PDF Page you will nedd XGraphics Object
-            XGraphics gfx = XGraphics.FromPdfPage(page);
+            ////For drawing in PDF Page you will nedd XGraphics Object
+            //XGraphics gfx = XGraphics.FromPdfPage(page);
 
-            //For Test you will have to define font to be used
-            XFont font = new XFont("Miriam Mono CLM", 14.25, XFontStyle.Bold);
+            ////For Test you will have to define font to be used
+            //XFont font = new XFont("Miriam Mono CLM", 14.25, XFontStyle.Bold);
 
-            //Finally use XGraphics & font object to draw text in PDF Page
-            gfx.DrawString("Kviitung", font, XBrushes.IndianRed, new XRect(0, 0, 200, 50), XStringFormats.Center);
-            for (int j = 25; j <= text.Count * 25; j += 25)
-            {
-                gfx.DrawString(text[k], font, XBrushes.Black, new XRect(0, j, 200, 50), XStringFormats.Center);
-                k++;
-            }            
-            string filename = @"..\..\Arved\tsekk" + i.ToString() + ".pdf";
-            document.Save(filename);
-            Process.Start(filename);         
+            ////Finally use XGraphics & font object to draw text in PDF Page
+            //gfx.DrawString("Kviitung", font, XBrushes.IndianRed, new XRect(0, 0, 200, 50), XStringFormats.Center);
+            //for (int j = 25; j <= text.Count * 25; j += 25)
+            //{
+            //    gfx.DrawString(text[k], font, XBrushes.Black, new XRect(0, j, 200, 50), XStringFormats.Center);
+            //    k++;
+            //}            
+            //string filename = @"..\..\Arved\tsekk" + i.ToString() + ".pdf";
+            //document.Save(filename);
+            //Process.Start(filename);         
         }
 
         void button2_Click(object sender, EventArgs e)

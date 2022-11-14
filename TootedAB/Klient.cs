@@ -36,12 +36,12 @@ namespace TootedAB
             connect.Open();
 
             dt_parool = new DataTable();
-            cmd = new SqlCommand("SELECT Telefon FROM Kliendid", connect);
+            cmd = new SqlCommand("SELECT Password FROM Kliendid", connect);
             adapter_parool = new SqlDataAdapter(cmd);
             adapter_parool.Fill(dt_parool);
             foreach (DataRow nimetus in dt_parool.Rows)
             {
-                paroolid.Add(nimetus.ToString());
+                paroolid.Add(nimetus["Password"].ToString());
             }
 
             dt_telefon = new DataTable();
@@ -50,26 +50,18 @@ namespace TootedAB
             adapter_telefon.Fill(dt_telefon);
             foreach (DataRow nimetus in dt_telefon.Rows)
             {
-                telefonid.Add(nimetus.ToString());
+                telefonid.Add(nimetus["Telefon"].ToString());
             }
 
             connect.Close();
         }
 
         public bool kontrolli_vastust()
-        {           
-            try
-            {
-                if (telefonid.IndexOf(telefon) == paroolid.IndexOf(parool)) 
-                {
-                    return true;
-                }                
-            }
-            catch (Exception)
-            {
+        {
+            if (telefonid.IndexOf(telefon) == paroolid.IndexOf(parool))
                 return false;
-            }  
-            return false;
+            else
+                return true;
         }
     }
 }

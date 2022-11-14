@@ -23,15 +23,14 @@ namespace TootedAB
         {
             klient.Telefon = textBox1.Text;
             klient.Parool = textBox2.Text;
-
-            //if (klient.kontrolli_vastust() == true)
-            //{
-            //    this.Close();
-            //}
-            //else
-            //{
-            //    MessageBox.Show("Vigad andmed!", "Error");
-            //}
+            if (klient.kontrolli_vastust() == true)
+            {
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Vigad andmed!", "Error");
+            }
         }
 
         void button2_Click(object sender, EventArgs e)
