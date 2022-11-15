@@ -53,7 +53,7 @@ namespace TootedAB
         }
         void lisa_kat_Click(object sender, EventArgs e)
         {
-            if (Kat_cbox.Text != null)
+            if (Kat_cbox.Text != "")
             {
                 connect.Open();
                 cmd = new SqlCommand("INSERT INTO Kategooriatable (Kategooria_nimetus) VALUES (@kat)", connect);
@@ -66,12 +66,12 @@ namespace TootedAB
             }
             else
             {
-                MessageBox.Show("Sisesta andmed!");
+                MessageBox.Show("Sisestage andmed!");
             }
         }
         void Lisa_btn_Click(object sender, EventArgs e)
         {
-            if (Toode_txt.Text.Trim() != String.Empty && Kogus_nud.Text != null && Hind_nud.Text != null && Kat_cbox.SelectedItem != null)
+            if (Toode_txt.Text.Trim() != String.Empty && Kogus_nud.Value != 0 && Hind_nud.Value != 0 && Kat_cbox.SelectedItem != null)
             {
                 try
                 {
@@ -200,7 +200,7 @@ namespace TootedAB
         }
         void Uuenda_btn_Click(object sender, EventArgs e)
         {
-            if (Toode_txt.Text != null && Kogus_nud != null && Hind_nud != null && Kat_cbox.SelectedItem != null)
+            if (Toode_txt.Text != "" && Kogus_nud.Value != 0 && Hind_nud.Value != 0 && Kat_cbox.SelectedItem != null)
             {
                 connect.Open();
                 cmd = new SqlCommand("UPDATE Toodetable SET Toodenimetus = @toode, Kogus = @kogus, Hind = @hind, Pilt = @pilt, Kategooria_id = @kat WHERE Id = @ID", connect);

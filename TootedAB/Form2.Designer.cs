@@ -42,7 +42,7 @@
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(62, 12);
+            this.comboBox1.Location = new System.Drawing.Point(16, 425);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 21);
             this.comboBox1.TabIndex = 0;
@@ -50,7 +50,7 @@
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(188, 12);
+            this.numericUpDown1.Location = new System.Drawing.Point(143, 425);
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(64, 20);
             this.numericUpDown1.TabIndex = 1;
@@ -59,7 +59,7 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Miriam Mono CLM", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.button1.Location = new System.Drawing.Point(159, 110);
+            this.button1.Location = new System.Drawing.Point(525, 443);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(92, 32);
             this.button1.TabIndex = 2;
@@ -71,7 +71,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Miriam Mono CLM", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.label1.Location = new System.Drawing.Point(12, 46);
+            this.label1.Location = new System.Drawing.Point(12, 449);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(76, 21);
             this.label1.TabIndex = 3;
@@ -81,7 +81,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Miriam Mono CLM", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.label2.Location = new System.Drawing.Point(93, 46);
+            this.label2.Location = new System.Drawing.Point(94, 449);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(21, 21);
             this.label2.TabIndex = 4;
@@ -90,7 +90,7 @@
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("Miriam Mono CLM", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.button2.Location = new System.Drawing.Point(12, 111);
+            this.button2.Location = new System.Drawing.Point(378, 443);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(141, 32);
             this.button2.TabIndex = 5;
@@ -101,7 +101,7 @@
             // button3
             // 
             this.button3.Font = new System.Drawing.Font("Miriam Mono CLM", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.button3.Location = new System.Drawing.Point(12, 149);
+            this.button3.Location = new System.Drawing.Point(467, 12);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(150, 32);
             this.button3.TabIndex = 6;
