@@ -23,9 +23,11 @@ namespace TootedAB
         {
             klient.Telefon = textBox1.Text;
             klient.Parool = textBox2.Text;
-            if (klient.kontrolli_vastust() == true)
+
+            if (klient.kontrolli_vastust())
             {
                 this.Close();
+                //
             }
             else
             {

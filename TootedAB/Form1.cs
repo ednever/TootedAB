@@ -33,7 +33,7 @@ namespace TootedAB
             adapter_toode = new SqlDataAdapter(cmd);
             adapter_toode.Fill(dt);
             dataGridView1.DataSource = dt;
-            Toode_pbox.Image = Image.FromFile("../../Images/nothing.png");
+            Toode_pbox.Image = Image.FromFile("../../Images/Nothing.png");
 
             adapter_kat = new SqlDataAdapter("SELECT Kategooria_nimetus FROM Kategooriatable", connect);
             DataTable dt_kat = new DataTable();
@@ -75,19 +75,12 @@ namespace TootedAB
             {
                 try
                 {
-
-                    //OpenFileDialog open = new OpenFileDialog();
-                    //open.InitialDirectory = Path.GetFullPath(@"..\..\Images");
-
-                    FileInfo open_info = new FileInfo(@"C:\Users\opilane.TTHK\Pictures" + Toode_txt.Text);
-                    string ext = Path.GetExtension(@"..\..\Images\" + Toode_txt.Text);
-
                     connect.Open();
                     cmd = new SqlCommand("INSERT INTO Toodetable (Toodenimetus, Kogus, Hind, Pilt, Kategooria_id) VALUES (@toode,@kogus,@hind,@pilt,@kat)", connect);
                     cmd.Parameters.AddWithValue("@toode", Toode_txt.Text);
                     cmd.Parameters.AddWithValue("@kogus", Kogus_nud.Value);
                     cmd.Parameters.AddWithValue("@hind", Hind_nud.Value);
-                    cmd.Parameters.AddWithValue("@pilt", Toode_txt.Text + ext);
+                    cmd.Parameters.AddWithValue("@pilt", Toode_txt.Text + ".png");
                     cmd.Parameters.AddWithValue("@kat", Kat_cbox.SelectedIndex + 1); // + ID andmebaasist võtta 
                     cmd.ExecuteNonQuery();
                     connect.Close();
@@ -107,7 +100,7 @@ namespace TootedAB
         void Vali_btn_Click(object sender, EventArgs e)
         {
             open.InitialDirectory = Path.GetFullPath(@"..\..\Images");
-            FileInfo open_info = new FileInfo(@"C:\Users\opilane.TTHK\Pictures\" + open.FileName);
+            //FileInfo open_info = new FileInfo(@"C:\Users\opilane.TTHK\Pictures\" + open.FileName);
 
             if (open.ShowDialog() == DialogResult.OK)
             {
@@ -189,7 +182,7 @@ namespace TootedAB
                 catch (Exception)
                 {
                     MessageBox.Show("Sellist faili pole kaustis","Error");
-                    Toode_pbox.Image = Image.FromFile(@"..\..\Images\nothing.png");
+                    Toode_pbox.Image = Image.FromFile(@"..\..\Images\Nothing.png");
                 }            
                 Kat_cbox.SelectedIndex = Int32.Parse(dataGridView1.Rows[e.RowIndex].Cells[5].Value.ToString()) - 1;
             }
@@ -207,7 +200,7 @@ namespace TootedAB
                 cmd.Parameters.AddWithValue("@toode", Toode_txt.Text);
                 cmd.Parameters.AddWithValue("@kogus", Kogus_nud.Value);
                 cmd.Parameters.AddWithValue("@hind", Hind_nud.Value);
-                cmd.Parameters.AddWithValue("@pilt", Toode_txt.Text + ".jpg"); // + format
+                cmd.Parameters.AddWithValue("@pilt", Toode_txt.Text + ".png"); // + format
                 cmd.Parameters.AddWithValue("@kat", Kat_cbox.SelectedIndex + 1); // + ID andmebaasist võtta
                 cmd.Parameters.AddWithValue("@ID", Id);
                 cmd.ExecuteNonQuery();

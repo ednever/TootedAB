@@ -15,7 +15,6 @@ namespace TootedAB
     {
         SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\AppData\Tooted_AB.mdf;Integrated Security=True");
         SqlCommand cmd;
-        SqlDataAdapter adapter;
         public Form6()
         {
             InitializeComponent();
@@ -31,8 +30,6 @@ namespace TootedAB
             {
                 fail_list.Add(fail["Telefon"].ToString());
             }
-            
-            
 
             if (textBox1.Text != "" && textBox2.Text != "" && textBox3.Text != "" && textBox4.Text != "" && fail_list.Contains(textBox3.Text) == false)
             {

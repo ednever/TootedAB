@@ -58,10 +58,15 @@ namespace TootedAB
 
         public bool kontrolli_vastust()
         {
-            if (telefonid.IndexOf(telefon) == paroolid.IndexOf(parool))
-                return false;
-            else
+            if (telefonid.Contains(telefon) && paroolid.Contains(parool)) // && telefonid.IndexOf(telefon) == paroolid.IndexOf(parool)
+            {
                 return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
     }
 }
