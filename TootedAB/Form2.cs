@@ -17,7 +17,8 @@ namespace TootedAB
 {
     public partial class Form2 : Form
     {
-        SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\AppData\Tooted_AB.mdf;Integrated Security=True");
+        //SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\AppData\Tooted_AB.mdf;Integrated Security=True"); 
+        SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\opilane\source\repos\Edgar Neverovski TARpv21\TootedAB\TootedAB\TootedAB\AppData\Tooted_AB.mdf;Integrated Security=True");
 
         SqlCommand cmd;
         SqlDataAdapter adapter_kat, failinimi_adap, adapter_toode, adapter_hind;
@@ -106,6 +107,7 @@ namespace TootedAB
                     pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
                     pictureBox.Location = new Point(c, r);
                     pictureBox.Click += PictureBox_Click; 
+                    pictureBox.Tag = (string)nimetus["Kategooria_nimetus"];
                     c = c + 102;
                     kategooriad.TabPages[j - 1].Controls.Add(pictureBox);
                 }
@@ -118,6 +120,8 @@ namespace TootedAB
         private void PictureBox_Click(object sender, EventArgs e)
         {
             PictureBox pika = (PictureBox)sender;
+            //pika.Tag.ToString() == comboBox1.SelectedItem.ToString() + ".png"            
+            //comboBox1.SelectedIndex = comboBox1.FindStringExact((string)pika.Tag);
 
         }
 
@@ -128,7 +132,7 @@ namespace TootedAB
             PdfDocument document = new PdfDocument();
             PdfPage page = document.AddPage();
 
-            //For drawing in PDF Page you will nedd XGraphics Object
+            //For drawing in PDF Page you will need XGraphics Object
             XGraphics gfx = XGraphics.FromPdfPage(page);
 
             //For Test you will have to define font to be used

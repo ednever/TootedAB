@@ -15,6 +15,8 @@ namespace TootedAB
     public partial class Form1 : Form
     {
         SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\AppData\Tooted_AB.mdf;Integrated Security=True");
+        //SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\opilane\source\repos\Edgar Neverovski TARpv21\TootedAB\TootedAB\TootedAB\AppData\Tooted_AB.mdf;Integrated Security=True");
+
         SqlCommand cmd;
         SqlDataAdapter adapter_toode, adapter_kat;  
         Random random = new Random();
@@ -157,9 +159,10 @@ namespace TootedAB
                 connect.Open();
                 cmd.Parameters.AddWithValue("@id", Id);
                 cmd.ExecuteNonQuery();
+                connect.Close();
                 Kustuta_Andmed();
                 Naita_Andmed();
-                connect.Close();
+
                 MessageBox.Show("Kategooria on kustutatud!");
             }
             else
@@ -221,8 +224,7 @@ namespace TootedAB
 
 // 1. Добавление
 //     1.1 Сделать проверку на форматы
-//     1.2 При добавлении товара обязательно открывать картинку с помощью кнопки Vali fail для внесения картинки в базу данных --
-// Также надо учитывать, что название картинки создаётся с нового наименования товара + его расширения
+//     1.2 При добавлении товара обязательно открывать картинку с помощью кнопки Vali fail для внесения картинки в базу данных
 //     1.4 Исправить добавление копированных категорий при добавлении товара в таблицу
 //     1.5 Исправить ошибку с сохранением товаров в базу данных при добавлении их в таблицу
 

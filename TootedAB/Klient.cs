@@ -10,7 +10,9 @@ namespace TootedAB
 {
     public class Klient
     {
-        SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\AppData\Tooted_AB.mdf;Integrated Security=True");
+        //SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\AppData\Tooted_AB.mdf;Integrated Security=True");
+        SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\opilane\source\repos\Edgar Neverovski TARpv21\TootedAB\TootedAB\TootedAB\bin\Debug\AppData\Tooted_AB.mdf;Integrated Security=True");
+
         SqlCommand cmd;
         SqlDataAdapter adapter_telefon, adapter_parool;
         DataTable dt_telefon, dt_parool;
@@ -55,10 +57,9 @@ namespace TootedAB
 
             connect.Close();
         }
-
         public bool kontrolli_vastust()
         {
-            if (telefonid.Contains(telefon) && paroolid.Contains(parool)) // && telefonid.IndexOf(telefon) == paroolid.IndexOf(parool)
+            if (telefonid.Contains(telefon) && paroolid.Contains(parool) && telefonid.IndexOf(telefon) == paroolid.IndexOf(parool)) // 
             {
                 return true;
             }
@@ -66,7 +67,6 @@ namespace TootedAB
             {
                 return false;
             }
-
         }
     }
 }

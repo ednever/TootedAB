@@ -182,12 +182,14 @@
       <DependentUpon>Tooted_AB.mdf</DependentUpon>
     </Content>
     <Content Include="Images\Karu.png" />
-    <Content Include="Images\piim.png" />
+    <Content Include="Images\nothing.png" />
+    <Content Include="Images\Piim.png" />
+    <Content Include="Images\Puur.png" />
+    <Content Include="Images\Roos.png" />
     <Content Include="Images\Õun.png" />
     <Content Include="Kat_pildid\Ehitusmaterjalid.png" />
     <Content Include="Kat_pildid\Lilled.png" />
     <Content Include="Kat_pildid\Mänguasjad.png" />
-    <Content Include="Images\nothing.png" />
     <Content Include="Kat_pildid\Toidutooded.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
