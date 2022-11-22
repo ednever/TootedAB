@@ -21,8 +21,7 @@ namespace TootedAB
         SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\opilane\source\repos\Edgar Neverovski TARpv21\TootedAB\TootedAB\TootedAB\AppData\Tooted_AB.mdf;Integrated Security=True");
 
         SqlCommand cmd;
-        SqlDataAdapter adapter_kat, failinimi_adap, adapter_toode, adapter_hind;
-        TabControl kategooriad;
+        SqlDataAdapter adapter_kat, failinimi_adap, adapter_toode;
         PictureBox pictureBox;
 
         TableLayoutPanel tlp;
@@ -39,21 +38,22 @@ namespace TootedAB
             Kategooria();
             connect.Open();
 
-            adapter_toode = new SqlDataAdapter("SELECT Toodenimetus FROM Toodetable", connect);
-            dt_toode = new DataTable();
-            adapter_toode.Fill(dt_toode);
-            foreach (DataRow nimetus in dt_toode.Rows)
-            {
-                comboBox1.Items.Add(nimetus["Toodenimetus"]);
-            }
+            //adapter_toode = new SqlDataAdapter("SELECT Toodenimetus FROM Toodetable", connect);
+            //dt_toode = new DataTable();
+            //adapter_toode.Fill(dt_toode);
+            //foreach (DataRow nimetus in dt_toode.Rows)
+            //{
+            //    comboBox1.Items.Add(nimetus["Toodenimetus"]);
+            //}
 
-            adapter_hind = new SqlDataAdapter("SELECT Hind FROM Toodetable", connect);
-            dt_hind = new DataTable();
-            adapter_hind.Fill(dt_hind);
-            foreach (DataRow nimetus in dt_hind.Rows)
-            {
-                hinned.Add(nimetus["Hind"]);
-            }
+            //adapter_hind = new SqlDataAdapter("SELECT Hind FROM Toodetable", connect);
+            //dt_hind = new DataTable();
+            //adapter_hind.Fill(dt_hind);
+            //foreach (DataRow nimetus in dt_hind.Rows)
+            //{
+            //    hinned.Add(nimetus["Hind"]);
+            //}
+
             connect.Close();
         }
 
@@ -106,8 +106,8 @@ namespace TootedAB
                     pictureBox.Width = pictureBox.Height = 100;
                     pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
                     pictureBox.Location = new Point(c, r);
-                    pictureBox.Click += PictureBox_Click; 
-                    pictureBox.Tag = (string)nimetus["Kategooria_nimetus"];
+                    pictureBox.Click += PictureBox_Click;
+                    pictureBox.Name = fail;
                     c = c + 102;
                     kategooriad.TabPages[j - 1].Controls.Add(pictureBox);
                 }
@@ -117,12 +117,17 @@ namespace TootedAB
             this.Controls.Add(kategooriad);
         }
 
-        private void PictureBox_Click(object sender, EventArgs e)
+        void PictureBox_Click(object sender, EventArgs e)
         {
-            PictureBox pika = (PictureBox)sender;
-            //pika.Tag.ToString() == comboBox1.SelectedItem.ToString() + ".png"            
-            //comboBox1.SelectedIndex = comboBox1.FindStringExact((string)pika.Tag);
-
+            PictureBox pika = (PictureBox)sender;          
+            cmd = new SqlCommand("SELECT Toodenimetus, Hind, Kogus=(SELECT Kogus FROM Ostukorv) FROM Toodetable WHERE Pilt = @nimi", connect);
+            cmd.Parameters.AddWithValue("@nimi", pika.Name);
+            adapter_toode = new SqlDataAdapter(cmd);
+            dt_toode = new DataTable();
+            adapter_toode.Fill(dt_toode);
+            dataGridView1.DataSource = dt_toode;
+            numericUpDown1.Value = 1;
+            dataGridView1.Rows[0].Cells[2].Value = numericUpDown1.Value;
         }
 
         int i, k;
@@ -151,17 +156,17 @@ namespace TootedAB
         }
         void button2_Click(object sender, EventArgs e)
         {
-            if (comboBox1.SelectedItem != null)
-            {
-                try
-                {
-                    text.Add(label2.Text + " " + comboBox1.SelectedItem.ToString());
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("Sisesta andmed!", "Error");
-                }
-            }
+        //    if (comboBox1.SelectedItem != null)
+        //    {
+        //        try
+        //        {
+        //            text.Add(label2.Text + " " + comboBox1.SelectedItem.ToString());
+        //        }
+        //        catch (Exception)
+        //        {
+        //            MessageBox.Show("Sisesta andmed!", "Error");
+        //        }
+        //    }
         }
         void button3_Click(object sender, EventArgs e)
         {
@@ -170,24 +175,27 @@ namespace TootedAB
 
         void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            if (comboBox1.SelectedItem != null)
-            {
-                label2.Text = "€ " + hind + " x " + numericUpDown1.Value.ToString() + " = " + Convert.ToDecimal(hind) * numericUpDown1.Value;
-            }
+            dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells[2].Value = numericUpDown1.Value;
+            //dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells[1].Value.
+            dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells[1].Value = decimal.Parse(dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells[1].Value.ToString()) * numericUpDown1.Value;
+            //if (comboBox1.SelectedItem != null)
+            //{
+            //    label2.Text = "€ " + hind + " x " + numericUpDown1.Value.ToString() + " = " + Convert.ToDecimal(hind) * numericUpDown1.Value;
+            //}
         }
 
-        void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            foreach (Object nimetus in comboBox1.Items)
-            {
-                if (comboBox1.SelectedItem == nimetus)
-                {
-                    hind = hinned[comboBox1.SelectedIndex].ToString();
-                    numericUpDown1.Value = 1;
-                    label2.Text = "€ " + hind + " x " + numericUpDown1.Value.ToString() + " = " + Convert.ToDecimal(hind) * numericUpDown1.Value;
-                }
-            }
-        }
+        //void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        //{
+        //    foreach (Object nimetus in comboBox1.Items)
+        //    {
+        //        if (comboBox1.SelectedItem == nimetus)
+        //        {
+        //            hind = hinned[comboBox1.SelectedIndex].ToString();
+        //            numericUpDown1.Value = 1;
+        //            label2.Text = "€ " + hind + " x " + numericUpDown1.Value.ToString() + " = " + Convert.ToDecimal(hind) * numericUpDown1.Value;
+        //        }
+        //    }
+        //}
     }
 }
 

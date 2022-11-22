@@ -10,16 +10,11 @@ namespace TootedAB
 {
     public class Klient
     {
+        
         //SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\AppData\Tooted_AB.mdf;Integrated Security=True");
         SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\opilane\source\repos\Edgar Neverovski TARpv21\TootedAB\TootedAB\TootedAB\bin\Debug\AppData\Tooted_AB.mdf;Integrated Security=True");
-
         SqlCommand cmd;
-        SqlDataAdapter adapter_telefon, adapter_parool;
-        DataTable dt_telefon, dt_parool;
-
         string telefon, parool;
-        List<string> telefonid = new List<string>();
-        List<string> paroolid = new List<string>();
 
         public string Telefon
         {
@@ -33,33 +28,15 @@ namespace TootedAB
             set { parool = value; }
         }
 
-        public void input_Andmed()
-        {
-            connect.Open();
-
-            dt_parool = new DataTable();
-            cmd = new SqlCommand("SELECT Password FROM Kliendid", connect);
-            adapter_parool = new SqlDataAdapter(cmd);
-            adapter_parool.Fill(dt_parool);
-            foreach (DataRow nimetus in dt_parool.Rows)
-            {
-                paroolid.Add(nimetus["Password"].ToString());
-            }
-
-            dt_telefon = new DataTable();
-            cmd = new SqlCommand("SELECT Telefon FROM Kliendid", connect);
-            adapter_telefon = new SqlDataAdapter(cmd);
-            adapter_telefon.Fill(dt_telefon);
-            foreach (DataRow nimetus in dt_telefon.Rows)
-            {
-                telefonid.Add(nimetus["Telefon"].ToString());
-            }
-
-            connect.Close();
-        }
         public bool kontrolli_vastust()
         {
-            if (telefonid.Contains(telefon) && paroolid.Contains(parool) && telefonid.IndexOf(telefon) == paroolid.IndexOf(parool)) // 
+            connect.Open();
+            cmd = new SqlCommand("SELECT Id FROM Kliendid where Telefon = @tel and Password = @pas", connect);
+            cmd.Parameters.AddWithValue("@tel", telefon);
+            cmd.Parameters.AddWithValue("@pas", parool);
+            object result = cmd.ExecuteScalar();
+            connect.Close();
+            if (result != null)
             {
                 return true;
             }

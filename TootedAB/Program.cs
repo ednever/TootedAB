@@ -21,7 +21,7 @@ namespace TootedAB
             //Form2 - Kassa >>> 
             //Form3 - Login >>> DONE
             //Form4 - Omaniku vorm >>> DONE
-            //Form5 - Kliendikaardid >>> 
+            //Form5 - Kliendikaardid >>> DONE
             //Form6 - Registreerimine >>> 
             //Form7 - Admin panel >>> DONE
         }

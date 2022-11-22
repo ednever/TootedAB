@@ -16,7 +16,6 @@ namespace TootedAB
         public Form5()
         {
             InitializeComponent();
-            klient.input_Andmed();
         }
 
         void button1_Click(object sender, EventArgs e)
@@ -27,14 +26,12 @@ namespace TootedAB
             if (klient.kontrolli_vastust())
             {
                 this.Close();
-                //
             }
             else
             {
                 MessageBox.Show("Vigad andmed!", "Error");
             }
         }
-
         void button2_Click(object sender, EventArgs e)
         {
             new Form6().Show();
