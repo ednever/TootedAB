@@ -26,36 +26,15 @@ namespace TootedAB
         SqlDataAdapter adapter_kat, failinimi_adap, adapter_toode;
         PictureBox pictureBox;
 
-        //TableLayoutPanel tlp;
-
         DataTable dt_toode, dt_hind;
         string hind;
         List<string> text = new List<string>();
-        List<Object> hinned = new List<Object>();
+        List<string> hinned = new List<string>();
 
         public Form2()
         {
             InitializeComponent();
             Kategooria();
-            //connect.Open();
-
-            //adapter_toode = new SqlDataAdapter("SELECT Toodenimetus FROM Toodetable", connect);
-            //dt_toode = new DataTable();
-            //adapter_toode.Fill(dt_toode);
-            //foreach (DataRow nimetus in dt_toode.Rows)
-            //{
-            //    comboBox1.Items.Add(nimetus["Toodenimetus"]);
-            //}
-
-            //adapter_hind = new SqlDataAdapter("SELECT Hind FROM Toodetable", connect);
-            //dt_hind = new DataTable();
-            //adapter_hind.Fill(dt_hind);
-            //foreach (DataRow nimetus in dt_hind.Rows)
-            //{
-            //    hinned.Add(nimetus["Hind"]);
-            //}
-
-            //connect.Close();
         }
 
         int kat_Id;
@@ -153,8 +132,24 @@ namespace TootedAB
         }
 
         int i, k;
-        void button1_Click(object sender, EventArgs e) //Проверить работоспособность
+        void button1_Click(object sender, EventArgs e) //Проверить на работоспособность
         {
+            cmd = new SqlCommand("SELECT Hind FROM Ostukorv", connect);
+            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+            adapter.Fill(dt);
+            foreach (DataRow nimetus in dt.Rows)
+            {
+                hinned.Add(nimetus["Hind"].ToString());
+            }
+
+            decimal summa = 0;
+            foreach (string item in hinned)
+            {
+                summa += decimal.Parse(item);
+            }
+            text.Add("Kokku : " + summa.ToString());
+
             //i++;
             //PdfDocument document = new PdfDocument();
             //PdfPage page = document.AddPage();
@@ -233,4 +228,7 @@ namespace TootedAB
 
 // <<< Дополнительные задания для развития формы >>>
 // 1.
-// Купленные товары отнимаются от общего количество товаров -> Добавить Kogus -- num max value
+// Купленные товары отнимаются от общего количество товаров --> обновление данных в таблице Toodetable
+//
+// 2. 
+// Что-то должно происходить при авторизации клиента

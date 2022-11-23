@@ -16,7 +16,7 @@ namespace TootedAB
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form2()); 
+            Application.Run(new Form4()); 
             //Form1 - Tooded >>>
             //Form2 - Kassa >>> 
             //Form3 - Login >>> DONE
