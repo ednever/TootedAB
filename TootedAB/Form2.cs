@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.IO;
-//using PdfSharp.Drawing;
-//using PdfSharp.Pdf;
+using PdfSharp.Drawing;
+using PdfSharp.Pdf;
 using System.Diagnostics;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Reflection.Emit;
@@ -19,22 +19,44 @@ namespace TootedAB
 {
     public partial class Form2 : Form
     {
-        SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\AppData\Tooted_AB.mdf;Integrated Security=True"); 
-        //SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\opilane\source\repos\Edgar Neverovski TARpv21\TootedAB\TootedAB\TootedAB\AppData\Tooted_AB.mdf;Integrated Security=True");
+        //SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\AppData\Tooted_AB.mdf;Integrated Security=True"); 
+        SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\opilane\source\repos\Edgar Neverovski TARpv21\TootedAB\TootedAB\AppData\Tooted_AB.mdf;Integrated Security=True");
 
         SqlCommand cmd;
         SqlDataAdapter adapter_kat, failinimi_adap, adapter_toode;
         PictureBox pictureBox;
 
-        DataTable dt_toode, dt_hind;
-        string hind;
+        DataTable dt_toode;
+        decimal hind = 0;
+        int i, k;
         List<string> text = new List<string>();
         List<string> hinned = new List<string>();
+
+        bool tulemus;
+
+        public bool Tulemus
+        {
+            get { return tulemus; }
+            set { tulemus = value; }
+        }
 
         public Form2()
         {
             InitializeComponent();
             Kategooria();
+            connect.Open();
+            cmd = new SqlCommand("DELETE FROM Ostukorv",connect);
+            cmd.ExecuteNonQuery();
+            connect.Close();
+
+            if (tulemus == true)
+            {
+                label1.Text = "Tere, ...!";
+            }
+            else
+            {
+                label1.Text = "Tere, klient!";
+            }
         }
 
         int kat_Id;
@@ -96,44 +118,36 @@ namespace TootedAB
             connect.Close();
             this.Controls.Add(kategooriad);
         }
-
-        void PictureBox_Click(object sender, EventArgs e) //Проверить kogus
+        void PictureBox_Click(object sender, EventArgs e)
         {
-            try
+            PictureBox pika = (PictureBox)sender;
+            cmd = new SqlCommand("SELECT Toodenimetus, Hind, Kogus = (SELECT Kogus FROM Ostukorv) FROM Toodetable WHERE Pilt = @nimi", connect);
+            cmd.Parameters.AddWithValue("@nimi", pika.Name);
+            adapter_toode = new SqlDataAdapter(cmd);
+            dt_toode = new DataTable();
+            adapter_toode.Fill(dt_toode);
+            dataGridView1.DataSource = dt_toode;
+            foreach (DataRow nimetus in dt_toode.Rows)
             {
-                PictureBox pika = (PictureBox)sender;
-                cmd = new SqlCommand("SELECT Toodenimetus, Hind, Kogus=(SELECT Kogus FROM Ostukorv) FROM Toodetable WHERE Pilt = @nimi", connect);
-                cmd.Parameters.AddWithValue("@nimi", pika.Name);
-                adapter_toode = new SqlDataAdapter(cmd);
-                dt_toode = new DataTable();
-                adapter_toode.Fill(dt_toode);
-                dataGridView1.DataSource = dt_toode;
-
-                //cmd = new SqlCommand("SELECT Kogus FROM Toodetable WHERE Pilt = @nimi", connect);
-                //cmd.Parameters.AddWithValue("@nimi", pika.Name);
-                //SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                //DataTable dt = new DataTable();
-                //adapter.Fill(dt);
-                //foreach (DataRow nimetus in dt.Rows)
-                //{
-                //    numericUpDown1.Maximum = decimal.Parse(nimetus["Kogus"].ToString());
-                //}
-
-                numericUpDown1.Value = 1;
-                dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells[2].Value = numericUpDown1.Value;
-
-                hind = dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells[1].Value.ToString();
+                hind = decimal.Parse(nimetus["Hind"].ToString());
             }
-            catch (Exception)
+
+            cmd = new SqlCommand("SELECT Kogus FROM Toodetable WHERE Pilt = @nimi", connect);
+            cmd.Parameters.AddWithValue("@nimi", pika.Name);
+            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+            adapter.Fill(dt);
+            foreach (DataRow nimetus in dt.Rows)
             {
-                MessageBox.Show("Selline toode on juba korvis", "Error");
+                numericUpDown1.Maximum = decimal.Parse(nimetus["Kogus"].ToString());
             }
-            
-        }
 
-        int i, k;
-        void button1_Click(object sender, EventArgs e) //Проверить на работоспособность
+            numericUpDown1.Value = 1;
+            dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells[2].Value = numericUpDown1.Value;
+        }        
+        void button1_Click(object sender, EventArgs e)
         {
+
             cmd = new SqlCommand("SELECT Hind FROM Ostukorv", connect);
             SqlDataAdapter adapter = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();
@@ -148,51 +162,62 @@ namespace TootedAB
             {
                 summa += decimal.Parse(item);
             }
-            text.Add("Kokku : " + summa.ToString());
+            text.Add("Kokku : " + summa.ToString() + " €");
 
-            //i++;
-            //PdfDocument document = new PdfDocument();
-            //PdfPage page = document.AddPage();
+            i++;
+            PdfDocument document = new PdfDocument();
+            PdfPage page = document.AddPage();
+            XGraphics gfx = XGraphics.FromPdfPage(page);
+            XFont font = new XFont("Miriam Mono CLM", 14.25, XFontStyle.Bold);
+            gfx.DrawString("Kviitung", font, XBrushes.IndianRed, new XRect(0, 0, 200, 50), XStringFormats.Center);
+            for (int j = 25; j <= text.Count * 25; j += 25)
+            {
+                gfx.DrawString(text[k], font, XBrushes.Black, new XRect(0, j, 200, 50), XStringFormats.Center);
+                k++;
+            }
+            string filename = @"..\..\Arved\tsekk" + i.ToString() + ".pdf";
+            document.Save(filename);
+            Process.Start(filename);
 
-            ////For drawing in PDF Page you will need XGraphics Object
-            //XGraphics gfx = XGraphics.FromPdfPage(page);
+            //connect.Open();
 
-            ////For Test you will have to define font to be used
-            //XFont font = new XFont("Miriam Mono CLM", 14.25, XFontStyle.Bold);
+            //cmd = new SqlCommand();
 
-            ////Finally use XGraphics & font object to draw text in PDF Page
-            //gfx.DrawString("Kviitung", font, XBrushes.IndianRed, new XRect(0, 0, 200, 50), XStringFormats.Center);
-            //for (int j = 25; j <= text.Count * 25; j += 25)
-            //{
-            //    gfx.DrawString(text[k], font, XBrushes.Black, new XRect(0, j, 200, 50), XStringFormats.Center);
-            //    k++;
-            //}
-            //string filename = @"..\..\Arved\tsekk" + i.ToString() + ".pdf";
-            //document.Save(filename);
-            //Process.Start(filename);
+            //cmd = new SqlCommand("UPDATE Toodetable SET Kogus = @uus_kogus WHERE ", connect);
+            //cmd.Parameters.AddWithValue("@uus_kogus",);
+            //cmd.ExecuteNonQuery();
+            //connect.Close();
+            //Klient klient = new Klient();
+            //klient.
+
+            //cmd = new SqlCommand("UPDATE Kliendid SET ");
+
         }
         void button2_Click(object sender, EventArgs e)
         {
             if (numericUpDown1.Value != 0)
             {
-                text.Add(
-                    dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells[0].Value.ToString() + " " +
-                    dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells[2].Value.ToString() + " " +
-                    dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells[1].Value.ToString() + " €");
-
                 connect.Open();
+
                 cmd = new SqlCommand("INSERT INTO Ostukorv (Toodenimetus, Kogus, Hind) VALUES (@toodenimetus, @kogus, @hind)", connect);
                 cmd.Parameters.AddWithValue("@toodenimetus", dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells[0].Value.ToString());
                 cmd.Parameters.AddWithValue("@kogus", dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells[2].Value);
                 cmd.Parameters.AddWithValue("@hind", dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells[1].Value);
                 cmd.ExecuteNonQuery();
 
-
                 cmd = new SqlCommand("SELECT Toodenimetus, Kogus, Hind FROM Ostukorv", connect);
                 adapter_toode = new SqlDataAdapter(cmd);
                 dt_toode = new DataTable();
                 adapter_toode.Fill(dt_toode);
                 dataGridView1.DataSource = dt_toode;
+                foreach  (DataRow nimetus in dt_toode.Rows)
+                {
+                    text.Add(
+                    nimetus["Toodenimetus"].ToString() + " " +
+                    nimetus["Kogus"].ToString() + " " +
+                    nimetus["Hind"].ToString() + " €");
+                }
+
                 connect.Close();
             }
             else
@@ -204,31 +229,24 @@ namespace TootedAB
         {
             new Form5().Show();
         }
-
-        void numericUpDown1_ValueChanged(object sender, EventArgs e) //Не видит hind
+        void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells[2].Value = numericUpDown1.Value;
-            //dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells[1].Value = decimal.Parse(hind) * numericUpDown1.Value;
+            try
+            {
+                dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells[2].Value = numericUpDown1.Value;
+                dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells[1].Value = hind * numericUpDown1.Value;
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Algselt vali toodet", "Error");
+            }
         }
-
-        //void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        //{
-        //    foreach (Object nimetus in comboBox1.Items)
-        //    {
-        //        if (comboBox1.SelectedItem == nimetus)
-        //        {
-        //            hind = hinned[comboBox1.SelectedIndex].ToString();
-        //            numericUpDown1.Value = 1;
-        //            label2.Text = "€ " + hind + " x " + numericUpDown1.Value.ToString() + " = " + Convert.ToDecimal(hind) * numericUpDown1.Value;
-        //        }
-        //    }
-        //}
     }
 }
 
 // <<< Дополнительные задания для развития формы >>>
 // 1.
-// Купленные товары отнимаются от общего количество товаров --> обновление данных в таблице Toodetable
+// обновление данных в таблице Toodetable
 //
 // 2. 
-// Что-то должно происходить при авторизации клиента
+// Бонус при регистрации клиента

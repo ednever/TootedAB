@@ -13,6 +13,8 @@ namespace TootedAB
     public partial class Form5 : Form
     {
         Klient klient = new Klient();
+        Form2 form2 = new Form2();
+
         public Form5()
         {
             InitializeComponent();
@@ -25,10 +27,16 @@ namespace TootedAB
 
             if (klient.kontrolli_vastust())
             {
-                this.Close();
+                //kassa_klient(true);
+                form2.Tulemus = true;
+                //tulemus = 
+                //this.Close();
             }
             else
             {
+                //kassa_klient(false);
+                form2.Tulemus = false;
+                //tulemus = false;
                 MessageBox.Show("Vigad andmed!", "Error");
             }
         }
