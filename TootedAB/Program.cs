@@ -27,4 +27,4 @@ namespace TootedAB
         }
     }
 }
-//Коннекты к базе данных прописаны в Form1, Form2, Form6, Form7, Klient, Toode
+//Коннекты к базе данных прописаны в Form1, Form2, Form5, Form6, Form7, Klient, Toode

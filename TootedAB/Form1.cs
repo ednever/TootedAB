@@ -14,8 +14,8 @@ namespace TootedAB
 {
     public partial class Form1 : Form
     {
-        //SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\AppData\Tooted_AB.mdf;Integrated Security=True");
-        SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\opilane\source\repos\Edgar Neverovski TARpv21\TootedAB\TootedAB\AppData\Tooted_AB.mdf;Integrated Security=True");
+        SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\AppData\Tooted_AB.mdf;Integrated Security=True");
+        //SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\opilane\source\repos\Edgar Neverovski TARpv21\TootedAB\TootedAB\AppData\Tooted_AB.mdf;Integrated Security=True");
 
         SqlCommand cmd;
         SqlDataAdapter adapter_toode, adapter_kat;  
@@ -102,7 +102,6 @@ namespace TootedAB
         void Vali_btn_Click(object sender, EventArgs e)
         {
             open.InitialDirectory = Path.GetFullPath(@"..\..\Images");
-            //FileInfo open_info = new FileInfo(@"C:\Users\opilane.TTHK\Pictures\" + open.FileName);
 
             if (open.ShowDialog() == DialogResult.OK)
             {
@@ -203,7 +202,7 @@ namespace TootedAB
                 cmd.Parameters.AddWithValue("@toode", Toode_txt.Text);
                 cmd.Parameters.AddWithValue("@kogus", Kogus_nud.Value);
                 cmd.Parameters.AddWithValue("@hind", Hind_nud.Value);
-                cmd.Parameters.AddWithValue("@pilt", Toode_txt.Text + ".png"); // + format
+                cmd.Parameters.AddWithValue("@pilt", Toode_txt.Text + ".png");
                 cmd.Parameters.AddWithValue("@kat", Kat_cbox.SelectedIndex + 1); // + ID andmebaasist võtta
                 cmd.Parameters.AddWithValue("@ID", Id);
                 cmd.ExecuteNonQuery();
@@ -220,25 +219,25 @@ namespace TootedAB
     }
 }
 
-// <<< Исправление ошибок >>>
+/* <<< Исправление ошибок >>>
 
-// 1. Добавление
-//     1.1 Сделать проверку на форматы
-//     1.2 При добавлении товара обязательно открывать картинку с помощью кнопки Vali fail для внесения картинки в базу данных
-//     1.4 Исправить добавление копированных категорий при добавлении товара в таблицу
-//     1.5 Исправить ошибку с сохранением товаров в базу данных при добавлении их в таблицу
+ 1.Добавление
+     1.1 Сделать проверку на форматы
+     1.2 При добавлении товара обязательно открывать картинку с помощью кнопки Vali fail для внесения картинки в базу данных
+     1.4 Исправить добавление копированных категорий при добавлении товара в таблицу
+     1.5 Исправить ошибку с сохранением товаров в базу данных при добавлении их в таблицу
 
-// 2. Добавление категорий
-//     2.1 При добавлении категорий сделать проверку на заполненность поля чтобы предотвратить создание пустых категорий
-//     2.2 Исправить ошибку с сохранением категории в базу данных после добавления категории
+ 2. Добавление категорий
+     2.1 При добавлении категорий сделать проверку на заполненность поля чтобы предотвратить создание пустых категорий
+     2.2 Исправить ошибку с сохранением категории в базу данных после добавления категории
 
-// 3. Обновление
-//     3.1 Сделать проверку на форматы
-//     3.2 Исправить проблемы с картинками при запуске запроса на обновление
-//     3.3 Исправить добавление копированных категорий при обновлении товара
+ 3. Обновление
+     3.1 Сделать проверку на форматы
+     3.2 Исправить проблемы с картинками при запуске запроса на обновление
+     3.3 Исправить добавление копированных категорий при обновлении товара
 
-// 4. Удаление
-//     4.1 Исправить добавление копированных категорий при удалении товара
+ 4. Удаление
+     4.1 Исправить добавление копированных категорий при удалении товара
 
-// 5. Удаление категорий
-//     5.1 Исправить добавление копированных категорий при удалении категорий
+ 5. Удаление категорий
+     5.1 Исправить добавление копированных категорий при удалении категорий */

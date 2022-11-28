@@ -19,8 +19,8 @@ namespace TootedAB
 {
     public partial class Form2 : Form
     {
-        //SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\AppData\Tooted_AB.mdf;Integrated Security=True"); 
-        SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\opilane\source\repos\Edgar Neverovski TARpv21\TootedAB\TootedAB\AppData\Tooted_AB.mdf;Integrated Security=True");
+        SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\AppData\Tooted_AB.mdf;Integrated Security=True"); 
+        //SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\opilane\source\repos\Edgar Neverovski TARpv21\TootedAB\TootedAB\AppData\Tooted_AB.mdf;Integrated Security=True");
 
         SqlCommand cmd;
         SqlDataAdapter adapter_kat, failinimi_adap, adapter_toode;
@@ -28,17 +28,9 @@ namespace TootedAB
 
         DataTable dt_toode;
         decimal hind = 0;
-        int i, k;
+        int i;
         List<string> text = new List<string>();
         List<string> hinned = new List<string>();
-
-        bool tulemus;
-
-        public bool Tulemus
-        {
-            get { return tulemus; }
-            set { tulemus = value; }
-        }
 
         public Form2()
         {
@@ -48,15 +40,6 @@ namespace TootedAB
             cmd = new SqlCommand("DELETE FROM Ostukorv",connect);
             cmd.ExecuteNonQuery();
             connect.Close();
-
-            if (tulemus == true)
-            {
-                label1.Text = "Tere, ...!";
-            }
-            else
-            {
-                label1.Text = "Tere, klient!";
-            }
         }
 
         int kat_Id;
@@ -147,7 +130,7 @@ namespace TootedAB
         }        
         void button1_Click(object sender, EventArgs e)
         {
-
+            int k = 0;
             cmd = new SqlCommand("SELECT Hind FROM Ostukorv", connect);
             SqlDataAdapter adapter = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();
@@ -162,7 +145,43 @@ namespace TootedAB
             {
                 summa += decimal.Parse(item);
             }
-            text.Add("Kokku : " + summa.ToString() + " €");
+
+            
+            if (label3.Text != "")
+            {
+                if (decimal.Parse(label3.Text) != 0)
+                {
+                    DialogResult dialog = MessageBox.Show("Kas tahate kasutada boonust?", "Boonus", MessageBoxButtons.YesNo);
+                    if (dialog == DialogResult.Yes)
+                    {
+                        text.Add("Kokku : " + summa.ToString() + " - " + label3.Text + " = "
+                            + (summa - decimal.Parse(label3.Text)).ToString() + " €");
+                        // добавить новый бонус к текущему + обновить бонус в таблице на 0
+                    }
+                    else if (dialog == DialogResult.No)
+                    {
+                        text.Add("Kokku : " + summa.ToString() + " €");
+
+                        string[] words = label1.Text.Split(' ');
+                        decimal boonus = summa * decimal.Parse((0.1).ToString());
+                        connect.Open();
+                        cmd = new SqlCommand("UPDATE Kliendid SET Boonus = " 
+                            + (decimal.Parse(label3.Text) + boonus) 
+                            + " WHERE Nimi = " + words[0], connect);
+                        cmd.ExecuteNonQuery();
+                        connect.Close();
+                    }
+                }
+                else
+                {
+                    text.Add("Kokku : " + summa.ToString() + " €");
+                    // обновить таблицу на новый бонус
+                }
+            }
+            else
+            {
+                text.Add("Kokku : " + summa.ToString() + " €");
+            }
 
             i++;
             PdfDocument document = new PdfDocument();
@@ -179,26 +198,18 @@ namespace TootedAB
             document.Save(filename);
             Process.Start(filename);
 
+
             //connect.Open();
-
-            //cmd = new SqlCommand();
-
             //cmd = new SqlCommand("UPDATE Toodetable SET Kogus = @uus_kogus WHERE ", connect);
             //cmd.Parameters.AddWithValue("@uus_kogus",);
             //cmd.ExecuteNonQuery();
             //connect.Close();
-            //Klient klient = new Klient();
-            //klient.
-
-            //cmd = new SqlCommand("UPDATE Kliendid SET ");
-
         }
         void button2_Click(object sender, EventArgs e)
         {
             if (numericUpDown1.Value != 0)
             {
                 connect.Open();
-
                 cmd = new SqlCommand("INSERT INTO Ostukorv (Toodenimetus, Kogus, Hind) VALUES (@toodenimetus, @kogus, @hind)", connect);
                 cmd.Parameters.AddWithValue("@toodenimetus", dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells[0].Value.ToString());
                 cmd.Parameters.AddWithValue("@kogus", dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells[2].Value);
@@ -217,7 +228,6 @@ namespace TootedAB
                     nimetus["Kogus"].ToString() + " " +
                     nimetus["Hind"].ToString() + " €");
                 }
-
                 connect.Close();
             }
             else
@@ -227,7 +237,7 @@ namespace TootedAB
         }
         void button3_Click(object sender, EventArgs e)
         {
-            new Form5().Show();
+            new Form5(this).Show();         
         }
         void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
@@ -244,9 +254,12 @@ namespace TootedAB
     }
 }
 
-// <<< Дополнительные задания для развития формы >>>
-// 1.
-// обновление данных в таблице Toodetable
-//
-// 2. 
-// Бонус при регистрации клиента
+/* <<< Дополнительные задания для развития формы >>>
+ 1.
+ Обновление данных в таблице Toodetable
+
+ 2. 
+ Бонус при регистрации клиента
+
+ 3.
+ Исправить ошибку с добавлением больше 2 товаров */
