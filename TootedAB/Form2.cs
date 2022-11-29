@@ -19,8 +19,8 @@ namespace TootedAB
 {
     public partial class Form2 : Form
     {
-        SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\AppData\Tooted_AB.mdf;Integrated Security=True"); 
-        //SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\opilane\source\repos\Edgar Neverovski TARpv21\TootedAB\TootedAB\AppData\Tooted_AB.mdf;Integrated Security=True");
+        //SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\AppData\Tooted_AB.mdf;Integrated Security=True"); 
+        SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\opilane\source\repos\Edgar Neverovski TARpv21\TootedAB\TootedAB\AppData\Tooted_AB.mdf;Integrated Security=True");
 
         SqlCommand cmd;
         SqlDataAdapter adapter_kat, failinimi_adap, adapter_toode;
@@ -146,7 +146,9 @@ namespace TootedAB
                 summa += decimal.Parse(item);
             }
 
-            
+            double boonus = (double)summa * 0.1;
+            string[] words = label1.Text.Split(' ');
+
             if (label3.Text != "")
             {
                 if (decimal.Parse(label3.Text) != 0)
@@ -154,20 +156,22 @@ namespace TootedAB
                     DialogResult dialog = MessageBox.Show("Kas tahate kasutada boonust?", "Boonus", MessageBoxButtons.YesNo);
                     if (dialog == DialogResult.Yes)
                     {
-                        text.Add("Kokku : " + summa.ToString() + " - " + label3.Text + " = "
-                            + (summa - decimal.Parse(label3.Text)).ToString() + " €");
-                        // добавить новый бонус к текущему + обновить бонус в таблице на 0
+                        text.Add("Kokku : " + summa.ToString() + " - " + label3.Text + " + " + boonus.ToString() + " = "
+                            + (summa - decimal.Parse(boonus.ToString()) - decimal.Parse(label3.Text)).ToString() + " €");
+
+                        connect.Open();
+                        cmd = new SqlCommand("UPDATE Kliendid SET Boonus = " + 0 + " WHERE Nimi = @nimi", connect);
+                        cmd.Parameters.AddWithValue("@nimi", words[0]);
+                        cmd.ExecuteNonQuery();
+                        connect.Close();
                     }
                     else if (dialog == DialogResult.No)
                     {
                         text.Add("Kokku : " + summa.ToString() + " €");
-
-                        string[] words = label1.Text.Split(' ');
-                        decimal boonus = summa * decimal.Parse((0.1).ToString());
                         connect.Open();
-                        cmd = new SqlCommand("UPDATE Kliendid SET Boonus = " 
-                            + (decimal.Parse(label3.Text) + boonus) 
-                            + " WHERE Nimi = " + words[0], connect);
+                        cmd = new SqlCommand("UPDATE Kliendid SET Boonus = @boonus WHERE Nimi = @nimi", connect);
+                        cmd.Parameters.AddWithValue("@boonus", double.Parse(label3.Text) + boonus);
+                        cmd.Parameters.AddWithValue("@nimi", words[0]);
                         cmd.ExecuteNonQuery();
                         connect.Close();
                     }
@@ -175,7 +179,12 @@ namespace TootedAB
                 else
                 {
                     text.Add("Kokku : " + summa.ToString() + " €");
-                    // обновить таблицу на новый бонус
+                    connect.Open();
+                    cmd = new SqlCommand("UPDATE Kliendid SET Boonus = @boonus WHERE Nimi = @nimi", connect);
+                    cmd.Parameters.AddWithValue("@boonus", boonus);
+                    cmd.Parameters.AddWithValue("@nimi", words[0]);
+                    cmd.ExecuteNonQuery();
+                    connect.Close();
                 }
             }
             else
@@ -197,13 +206,7 @@ namespace TootedAB
             string filename = @"..\..\Arved\tsekk" + i.ToString() + ".pdf";
             document.Save(filename);
             Process.Start(filename);
-
-
-            //connect.Open();
-            //cmd = new SqlCommand("UPDATE Toodetable SET Kogus = @uus_kogus WHERE ", connect);
-            //cmd.Parameters.AddWithValue("@uus_kogus",);
-            //cmd.ExecuteNonQuery();
-            //connect.Close();
+            this.Close();
         }
         void button2_Click(object sender, EventArgs e)
         {
@@ -227,6 +230,12 @@ namespace TootedAB
                     nimetus["Toodenimetus"].ToString() + " " +
                     nimetus["Kogus"].ToString() + " " +
                     nimetus["Hind"].ToString() + " €");
+
+                    cmd = new SqlCommand("UPDATE Toodetable SET Kogus = @kogus WHERE Toodenimetus = @nimi", connect);
+                    cmd.Parameters.AddWithValue("@kogus", numericUpDown1.Maximum - int.Parse(nimetus["Kogus"].ToString()));
+                    cmd.Parameters.AddWithValue("@nimi", nimetus["Toodenimetus"].ToString());
+                    cmd.ExecuteNonQuery();
+
                 }
                 connect.Close();
             }
@@ -253,13 +262,3 @@ namespace TootedAB
         }
     }
 }
-
-/* <<< Дополнительные задания для развития формы >>>
- 1.
- Обновление данных в таблице Toodetable
-
- 2. 
- Бонус при регистрации клиента
-
- 3.
- Исправить ошибку с добавлением больше 2 товаров */
